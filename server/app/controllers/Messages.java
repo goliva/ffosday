@@ -54,7 +54,7 @@ public class Messages extends Controller {
 		 }
 	}
 
-	public synchronized static Result getNewMessages(){
+	public static Result getNewMessages(){
 		response().setHeader("Access-Control-Allow-Origin", "*");
 	
 		List<Message> messagesToSend = new ArrayList<Message>(messages);
@@ -64,7 +64,7 @@ public class Messages extends Controller {
 		return ok(Json.toJson(messagesToSend)); 
 	}
 	
-	public synchronized static Result isUserMention(String userName){
+	public static Result isUserMention(String userName){
 		response().setHeader("Access-Control-Allow-Origin", "*");
 		
 		while (mentionedUsers.iterator().hasNext()) {
