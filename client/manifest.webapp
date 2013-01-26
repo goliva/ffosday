@@ -1,12 +1,12 @@
 {
-    "name":"MozillaBall",
+    "name":"BoliChat",
     "developer": {
-        "name":"Mozilla Labs Demo",
-        "url":"http://mozillalabs.com"
+        "name":"Boli Chat Demo",
+        "url":"https://github.com/goliva/ffosday"
     },
     "description":"Fast and furious Open Web development game play!\n\nScore points by implementing Open Web features.\n\nWin powerups by upgrading your JavaScript engine, adding security features, and hardware acceleration.",
     "icons":{
-        "128":"/icon.png"
+        "128":"/icon2.png"
     },
     "launch_path": "/login.html"
 }
