@@ -13,10 +13,10 @@
 
 <body>
 
-<form class="ch-form ch-box" action="send()" method="GET">
+<form class="ch-form ch-box" method="GET">
 	<p class="ch-form-row">
 		<input id="text" type="text" />
-		<input class="ch-btn ch-btn-big" type="submit" value="Send" />
+		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
 	</p>
 </form>
 
@@ -31,13 +31,52 @@
 
 $(document).ready(function() {
 	var nickname = document.getElementById("nickname");
-
-  alert( nickname );
+	alert( nickname );
+	checkMsgs(nickname);
 });
 
 function send(){
-	alert("enviar!");
+	var msg = {
+            name: "gonzalo",
+           	message: "puto el que lee"
+    }
+    try{
+	$.ajax({
+         url:    'http://10.255.180.102:9000/messages',
+         type: 'POST',
+         dataType: 'json',
+         data: msg
+		}).done(function( msg ) {
+			alert( "Data Saved: " + msg );
+		});
+		alert("bla");
+	}catch(){
+		console.log("error");
+	}
 }
+
+var checkMsgs = function(nickname){
+    jQuery.ajax({
+         url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
+         success: function(result) {
+                    if(result == "true"){
+                          alert("Tienes un mensaje!");
+                          var snd = new Audio("ah.wav"); // buffers automatically when created
+                          snd.play();
+                          }
+                  }
+    });     
+  
+
+};
+
+
+checkMsgs("gonzalo");
+
+$("#sendmsg").click(function(){
+	send();
+	return false;
+})
 
 </script>
 
