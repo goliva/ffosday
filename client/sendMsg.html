@@ -13,12 +13,13 @@
 
 <body>
 
-<form class="ch-form ch-box" >
+<form id="modif_PDC_form" class="ch-form ch-box" >
 	<p class="ch-form-subtitle">
 		<label id="hiUser" for="text"></label>
 	</p>
 	<p class="ch-form-row">
-		<input id="msg" type="text" />
+		<input id="userName" type="hidden" />
+		<input id="messages" type="text" />
 		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
 </form>
 
@@ -35,7 +36,7 @@ var nickname = 'user';
 $(document).ready(function() {
 	nickname = sessionStorage.getItem("nickname");
 	$('#hiUser').text("Hi " + nickname + ",") ;
-
+	$('#userName').val(nickname);
 	// Inicio el worker async
 	initWorker();
 });
@@ -43,15 +44,14 @@ $(document).ready(function() {
 function send(){
 	var msg = {
             userName: nickname,
-           	message: $('#msg').val()
+           	message: $('#messages').val()
     };
     try{
 		$.ajax({
-         	type: "POST",
-         	url: "http://10.255.180.102:9000/messages",
-         	data: JSON.stringify(msg),
-         	contentType: "application/json; charset=utf-8",
-    	 	dataType: "json",
+         	url: 'http://localhost:9000/messages',
+         	type: 'POST',
+         	data: '{ "userName": "userName", "message": "password" }',
+    	 	dataType: 'json',
     		success: function(data){alert(data);},
 		    failure: function(errMsg) {
 		        console.log('Error: ' + errMsg);
