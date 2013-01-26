@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MozillaBall</title>
+<link rel="stylesheet" type="text/css" href="http://localhost:8000/css/chico-min-0.13.1.css">
+<style>
+</style>
+<script>
+
+
+</script>
+</head>
+
+<body>
+
+<form class="ch-form ch-box" >
+	<p class="ch-form-subtitle">
+		<label id="hiUser" for="text"></label>
+	</p>
+	<p class="ch-form-row">
+		<input id="msg" type="text" />
+		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
+</form>
+
+
+</body>
+<script src="http://localhost:8000/js/jquery-1.4.2.min.js"></script>
+<script src="http://localhost:8000/js/chico-min-0.13.1.js"></script>
+
+<!-- <script src="https://myapps.mozillalabs.com/jsapi/include.js"></script> -->
+<script>
+
+var nickname = 'user';
+
+$(document).ready(function() {
+	nickname = sessionStorage.getItem("nickname");
+	$('#hiUser').text("Hi " + nickname + ",") ;
+
+	// Inicio el worker async
+	initWorker();
+});
+
+function send(){
+	var msg = {
+            userName: nickname,
+           	message: $('#msg').val()
+    };
+    try{
+		$.ajax({
+         	type: "POST",
+         	url: "http://localhost:9000/messages",
+         	data: JSON.stringify(msg),
+         	contentType: "application/json; charset=utf-8",
+    	 	dataType: "json",
+    		success: function(data){alert(data);},
+		    failure: function(errMsg) {
+		        console.log('Error: ' + errMsg);
+		    }
+		});
+	}catch(err){
+		console.log("error:" + err);
+	}
+
+}
+
+var checkMsgs = function(){
+    jQuery.ajax({
+         url:    'http://localhost:9000/'+nickname+'/isMention',
+         success: function(result) {
+                    if(result == "true"){
+                          alert("You have a new private Message!");
+                          var snd = new Audio("ah.wav"); // buffers automatically when created
+                          snd.play();
+                          }
+                  }
+    });     
+  
+
+};
+
+// Worker async
+var worker;
+function initWorker(){
+	setTimeout(function(){
+		// Consulto si tengo msgs
+		checkMsgs();
+
+		//vuelvo a llamarme 
+		initWorker();
+	}, 2000);
+
+}
+
+
+$("#sendmsg").click(function(){
+	send();
+	return false;
+})
+
+</script>
+
+</html>
