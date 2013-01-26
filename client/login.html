@@ -37,7 +37,8 @@ $(document).ready(function() {
 });
 
 function login(){
-  document.location.href='/sendMsg.html?nickname=' + $('#nickname').val();  
+  sessionStorage.setItem("nickname", $('#nickname').val() );
+  document.location.href='/sendMsg.html';  
 }
 
 </script>
