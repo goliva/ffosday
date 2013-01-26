@@ -13,11 +13,13 @@
 
 <body>
 
-<form class="ch-form ch-box" method="GET">
-	<p class="ch-form-row">
-		<input id="text" type="text" />
-		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
+<form class="ch-form ch-box"  method="GET">
+	<p class="ch-form-subtitle">
+		<label id="hiUser" for="text"></label>
 	</p>
+	<p class="ch-form-row">
+		<input id="msg" type="text" />
+		<input class="ch-btn ch-btn-big" type="submit" value="Send" />
 </form>
 
 
@@ -28,14 +30,17 @@
 <!-- <script src="https://myapps.mozillalabs.com/jsapi/include.js"></script> -->
 <script>
 
+var nickname = 'user';
 
 $(document).ready(function() {
-	var nickname = document.getElementById("nickname");
-	alert( nickname );
+	nickname = sessionStorage.getItem("nickname");
+	$('#hiUser').text("Hi " + nickname + ",") ;
 	checkMsgs(nickname);
 });
 
 function send(){
+	var msg = $('#msg').val();
+	$('#msg').val("");
 	var msg = {
             name: "gonzalo",
            	message: "puto el que lee"
@@ -53,6 +58,7 @@ function send(){
 	}catch(){
 		console.log("error");
 	}
+
 }
 
 var checkMsgs = function(nickname){
