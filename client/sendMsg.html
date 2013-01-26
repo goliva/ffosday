@@ -13,13 +13,13 @@
 
 <body>
 
-<form class="ch-form ch-box"  method="GET">
+<form class="ch-form ch-box" >
 	<p class="ch-form-subtitle">
 		<label id="hiUser" for="text"></label>
 	</p>
 	<p class="ch-form-row">
 		<input id="msg" type="text" />
-		<input class="ch-btn ch-btn-big" type="submit" value="Send" />
+		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
 </form>
 
 
@@ -39,31 +39,31 @@ $(document).ready(function() {
 });
 
 function send(){
-	var msg = $('#msg').val();
-	$('#msg').val("");
 	var msg = {
-            name: "gonzalo",
-           	message: "puto el que lee"
-    }
+            userName: nickname,
+           	message: $('#msg').val()
+    };
     try{
-	$.ajax({
-         url:    'http://10.255.180.102:9000/messages',
-         type: 'POST',
-         dataType: 'json',
-         data: msg
-		}).done(function( msg ) {
-			alert( "Data Saved: " + msg );
+		$.ajax({
+         	type: "POST",
+         	url: "http://localhost:9000/messages",
+         	data: JSON.stringify(msg),
+         	contentType: "application/json; charset=utf-8",
+    	 	dataType: "json",
+    		success: function(data){alert(data);},
+		    failure: function(errMsg) {
+		        alert(errMsg);
+		    }
 		});
-		alert("bla");
-	}catch(){
-		console.log("error");
+	}catch(err){
+		console.log(err);
 	}
 
 }
 
 var checkMsgs = function(nickname){
     jQuery.ajax({
-         url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
+         url:    'http://localhost:9000/'+nickname+'/isMention',
          success: function(result) {
                     if(result == "true"){
                           alert("Tienes un mensaje!");
