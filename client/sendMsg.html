@@ -48,7 +48,7 @@ function send(){
     try{
 		$.ajax({
          	type: "POST",
-         	url: "http://localhost:9000/messages",
+         	url: "http://10.255.180.102:9000/messages",
          	data: JSON.stringify(msg),
          	contentType: "application/json; charset=utf-8",
     	 	dataType: "json",
@@ -65,7 +65,7 @@ function send(){
 
 var checkMsgs = function(){
     jQuery.ajax({
-         url:    'http://localhost:9000/'+nickname+'/isMention',
+         url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
          success: function(result) {
                     if(result == "true"){
                           alert("You have a new private Message!");
