@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MozillaBall</title>
+<link rel="stylesheet" type="text/css" href="http://localhost:8000/css/chico-min-0.13.1.css">
+<style>
+</style>
+<script>
+
+
+</script>
+</head>
+
+<body>
+
+<form class="ch-form ch-box" action="send()" method="GET">
+	<p class="ch-form-row">
+		<input id="text" type="text" />
+		<input class="ch-btn ch-btn-big" type="submit" value="Send" />
+	</p>
+</form>
+
+
+</body>
+<script src="http://localhost:8000/js/jquery-1.4.2.min.js"></script>
+<script src="http://localhost:8000/js/chico-min-0.13.1.js"></script>
+
+<!-- <script src="https://myapps.mozillalabs.com/jsapi/include.js"></script> -->
+<script>
+
+
+$(document).ready(function() {
+	var nickname = document.getElementById("nickname");
+
+  alert( nickname );
+});
+
+function send(){
+	alert("enviar!");
+}
+
+</script>
+
+</html>

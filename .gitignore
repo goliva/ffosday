@@ -1,3 +1,5 @@
 .settings/
 target/
 logs/
+client/.DS_Store
+client/js/.DS_Store
