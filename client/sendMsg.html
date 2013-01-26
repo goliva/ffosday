@@ -36,6 +36,8 @@ $(document).ready(function() {
 	nickname = sessionStorage.getItem("nickname");
 	$('#hiUser').text("Hi " + nickname + ",") ;
 	checkMsgs(nickname);
+
+	initWorker();
 });
 
 function send(){
@@ -55,13 +57,13 @@ function send(){
 			alert( "Data Saved: " + msg );
 		});
 		alert("bla");
-	}catch(){
-		console.log("error");
+	}catch(err){
+		console.log("error:" + err);
 	}
 
 }
 
-var checkMsgs = function(nickname){
+var checkMsgs = function(){
     jQuery.ajax({
          url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
          success: function(result) {
@@ -76,8 +78,19 @@ var checkMsgs = function(nickname){
 
 };
 
+var worker;
 
-checkMsgs("gonzalo");
+function initWorker(){
+	setTimeout(function(){
+		// Consulto si tengo msgs
+		checkMsgs();
+
+		//vuelvo a llamarme 
+		initWorker();
+	}, 2000);
+
+}
+
 
 $("#sendmsg").click(function(){
 	send();
