@@ -13,6 +13,7 @@ import models.Message;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.Color;
 
 public class Messages extends Controller {
 	
@@ -25,7 +26,7 @@ public class Messages extends Controller {
 		Message message = Json.fromJson(request().body().asJson(), Message.class);
 		messages.add(message);
 		
-		//checkAndAssignUserColor(message);
+		checkAndAssignUserColor(message);
 		checkAndAddHashedUsers(message);
 		return ok(Json.toJson(message));
 	}
@@ -35,7 +36,7 @@ public class Messages extends Controller {
 		if (!userColors.containsKey(userName)){
 			String color;
 			do{
-				color = generateHexColor();
+				color = Color.getRandomColor();
 			}while(userColors.containsValue(color));
 			
 			userColors.put(userName, color);
@@ -43,10 +44,6 @@ public class Messages extends Controller {
 		}else{
 			message.setColor(userColors.get(userName));
 		}
-	}
-
-	private static String generateHexColor() {
-		return "#";
 	}
 
 	private static void checkAndAddHashedUsers(Message message) {
