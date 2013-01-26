@@ -49,9 +49,7 @@ visibility: hidden;
 font-size: 2em;
 bottom: -1px;
 font-family: "Gill Sans / Gill Sans MT, sans-serif";
-margin-left: 10px;
 width:auto;
-border:1px solid red;
 position: absolute;
 }
 #messages-container{
@@ -61,22 +59,21 @@ position: absolute;
 	left:0;
 	height:2em;
 	bottom:0;
-	border:1px solid red;
 }
 #messages{
-	position:fixed;
+	position:relative;
 	background-color:gray;
 	width:100%;
 	left:0;
 	height:2em;
 	bottom:0;
-	/*-webkit-animation-timing-function: linear;
-	-webkit-animation-duration:4s;
+	webkit-animation-timing-function: linear;
+	-webkit-animation-duration:100s;
 	-webkit-animation-name: scroll;
 	-webkit-animation-fill-mode:forwards;
 
 	-moz-animation-timing-function: linear;
-	-moz-animation-duration:7s;
+	-moz-animation-duration:100s;
 	-moz-animation-name: scroll;
 	-moz-animation-fill-mode:forwards;*/
 		border:1px solid red;
@@ -84,13 +81,13 @@ position: absolute;
 }
  
 @-moz-keyframes scroll {
-	0% {left:100%;}
-	100% {left:0%;visibility: hidden;}
+	0% {left:0%;}
+	100% {left:-1000%;}
 } 
 @-webkit-keyframes scroll {
-	0% {left:100%;}
-	100% {left:0%;visibility: hidden;}
-}*/
+	0% {left:0%;}
+	100% {left:-1000%;}
+}
 </style>
 </head>
 
@@ -137,37 +134,31 @@ position: absolute;
 	var addMessage = function(msg){
 		var elem = $('<span class="message">'+msg.userName+':'+msg.message+'</span>');
 		$("#messages").append(elem);
-		lastLeft = lastLeft + elem.width() + 2;
-		if(lastLeft<windowWidth)
-			lastLeft =windowWidth;
+		lastLeft = lastLeft + elem.width()+20;
 		elem.css('left',lastLeft );
 		elem.css('visibility','visible');
 	}
 	var moveMessages = function(){
-		$(".message").each(function(){
-			$(this).css("left",$(this).css("left")-1 + "px");
-		});
-		lastLeft-1;
+		$("#messages").css("left",$("#messages").position().left-20);
+		
 	}
-	//$("#messages").css("top", $("#messages").position().top-$("#messages").height()).css("position","absolute").css("visibility","visible");
-
+	
 	captureWebCam();
 	var lastHndlr;
 	function getNews(){
-		lastHndlr=setTimeout(getNews,1000);
+		setInterval(getNews,2000);
+		addMessage({"userName":"pepe","message":"mensaje"+Math.random()});
+		return;
 		$.getJSON("http://10.255.180.102:9000/messages/new", function(resp){
-				clearTimeout(lastHndlr);
 				if(resp && resp.length){
 					console.log(resp);
 					for(var i=0;i<resp.length;i++){
 						addMessage(resp[i]);
 					}
 				}
-			lastHndlr=setTimeout(getNews,200);
 		});
 	}
 	getNews();
-	setInterval(moveMessages,1000);
 </script>
 </body>
 </html>
