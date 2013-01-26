@@ -13,7 +13,7 @@
 
 <body>
 
-<form class="ch-form ch-box" >
+<form id="modif_PDC_form" class="ch-form ch-box" >
 	<p class="ch-form-subtitle">
 		<label id="hiUser" for="text"></label>
 	</p>
@@ -47,7 +47,7 @@ function send(){
 		$.ajax({
          	type: "POST",
          	url: "http://localhost:9000/messages",
-         	data: JSON.stringify(msg),
+         	data: $('#modif_PDC_form').serialize(),
          	contentType: "application/json; charset=utf-8",
     	 	dataType: "json",
     		success: function(data){alert(data);},
