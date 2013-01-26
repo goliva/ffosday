@@ -1,11 +1,11 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +17,7 @@ import utils.Color;
 
 public class Messages extends Controller {
 	
-	private static Map<String, String> userColors = new HashMap<String, String>();
+	private static Map<String, String> userColors = new ConcurrentHashMap<String, String>();
 	
 	private static List<Message> messages = new ArrayList<Message>();
 	private static Set<String> mentionedUsers = new HashSet<String>();
