@@ -35,7 +35,9 @@ var nickname = 'user';
 $(document).ready(function() {
 	nickname = sessionStorage.getItem("nickname");
 	$('#hiUser').text("Hi " + nickname + ",") ;
-	checkMsgs(nickname);
+
+	// Inicio el worker async
+	initWorker();
 });
 
 function send(){
@@ -46,27 +48,27 @@ function send(){
     try{
 		$.ajax({
          	type: "POST",
-         	url: "http://localhost:9000/messages",
+         	url: "http://10.255.180.102:9000/messages",
          	data: JSON.stringify(msg),
          	contentType: "application/json; charset=utf-8",
     	 	dataType: "json",
     		success: function(data){alert(data);},
 		    failure: function(errMsg) {
-		        alert(errMsg);
+		        console.log('Error: ' + errMsg);
 		    }
 		});
 	}catch(err){
-		console.log(err);
+		console.log("error:" + err);
 	}
 
 }
 
-var checkMsgs = function(nickname){
+var checkMsgs = function(){
     jQuery.ajax({
-         url:    'http://localhost:9000/'+nickname+'/isMention',
+         url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
          success: function(result) {
                     if(result == "true"){
-                          alert("Tienes un mensaje!");
+                          alert("You have a new private Message!");
                           var snd = new Audio("ah.wav"); // buffers automatically when created
                           snd.play();
                           }
@@ -76,8 +78,19 @@ var checkMsgs = function(nickname){
 
 };
 
+// Worker async
+var worker;
+function initWorker(){
+	setTimeout(function(){
+		// Consulto si tengo msgs
+		checkMsgs();
 
-checkMsgs("gonzalo");
+		//vuelvo a llamarme 
+		initWorker();
+	}, 2000);
+
+}
+
 
 $("#sendmsg").click(function(){
 	send();
