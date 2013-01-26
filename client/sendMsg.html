@@ -13,13 +13,13 @@
 
 <body>
 
-<form class="ch-form ch-box"  method="GET">
+<form class="ch-form ch-box" >
 	<p class="ch-form-subtitle">
 		<label id="hiUser" for="text"></label>
 	</p>
 	<p class="ch-form-row">
 		<input id="msg" type="text" />
-		<input class="ch-btn ch-btn-big" type="submit" value="Send" />
+		<input id="sendmsg" class="ch-btn ch-btn-big" type="submit" value="Send" />
 </form>
 
 
@@ -35,28 +35,28 @@ var nickname = 'user';
 $(document).ready(function() {
 	nickname = sessionStorage.getItem("nickname");
 	$('#hiUser').text("Hi " + nickname + ",") ;
-	checkMsgs(nickname);
 
+	// Inicio el worker async
 	initWorker();
 });
 
 function send(){
-	var msg = $('#msg').val();
-	$('#msg').val("");
 	var msg = {
-            name: "gonzalo",
-           	message: "puto el que lee"
-    }
+            userName: nickname,
+           	message: $('#msg').val()
+    };
     try{
-	$.ajax({
-         url:    'http://10.255.180.102:9000/messages',
-         type: 'POST',
-         dataType: 'json',
-         data: msg
-		}).done(function( msg ) {
-			alert( "Data Saved: " + msg );
+		$.ajax({
+         	type: "POST",
+         	url: "http://localhost:9000/messages",
+         	data: JSON.stringify(msg),
+         	contentType: "application/json; charset=utf-8",
+    	 	dataType: "json",
+    		success: function(data){alert(data);},
+		    failure: function(errMsg) {
+		        console.log('Error: ' + errMsg);
+		    }
 		});
-		alert("bla");
 	}catch(err){
 		console.log("error:" + err);
 	}
@@ -65,10 +65,10 @@ function send(){
 
 var checkMsgs = function(){
     jQuery.ajax({
-         url:    'http://10.255.180.102:9000/'+nickname+'/isMention',
+         url:    'http://localhost:9000/'+nickname+'/isMention',
          success: function(result) {
                     if(result == "true"){
-                          alert("Tienes un mensaje!");
+                          alert("You have a new private Message!");
                           var snd = new Audio("ah.wav"); // buffers automatically when created
                           snd.play();
                           }
@@ -78,8 +78,8 @@ var checkMsgs = function(){
 
 };
 
+// Worker async
 var worker;
-
 function initWorker(){
 	setTimeout(function(){
 		// Consulto si tengo msgs
