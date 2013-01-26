@@ -1,0 +1,173 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<style>
+body{
+	margin:0;
+}
+video {
+  width: 100%;
+  }
+ /* .message {
+position:absolute;
+-webkit-animation-timing-function: linear;
+-webkit-animation-duration:4s;
+-webkit-animation-name: scroll;
+-webkit-animation-fill-mode:forwards;
+
+-moz-animation-timing-function: linear;
+-moz-animation-duration:7s;
+-moz-animation-name: scroll;
+-moz-animation-fill-mode:forwards;
+
+font-size: 2em;
+bottom: -1px;
+}
+#messages{
+position:fixed;
+	background-color:red;
+	width:100%;
+	left:0;
+	height:2em;
+	bottom:0;
+}
+ 
+@-moz-keyframes scroll {
+	0% {left:100%;}
+	100% {left:0%;visibility: hidden;}
+} 
+@-webkit-keyframes scroll {
+	0% {left:100%;}
+	100% {left:0%;visibility: hidden;}
+}*/
+ 
+/*.message:hover { -webkit-animation-play-state: paused;}*/
+
+.message {
+
+visibility: hidden;
+font-size: 2em;
+bottom: -1px;
+font-family: "Gill Sans / Gill Sans MT, sans-serif";
+margin-left: 10px;
+width:auto;
+border:1px solid red;
+position: absolute;
+}
+#messages-container{
+	position:fixed;
+	background-color:gray;
+	width:100%;
+	left:0;
+	height:2em;
+	bottom:0;
+	border:1px solid red;
+}
+#messages{
+	position:fixed;
+	background-color:gray;
+	width:100%;
+	left:0;
+	height:2em;
+	bottom:0;
+	/*-webkit-animation-timing-function: linear;
+	-webkit-animation-duration:4s;
+	-webkit-animation-name: scroll;
+	-webkit-animation-fill-mode:forwards;
+
+	-moz-animation-timing-function: linear;
+	-moz-animation-duration:7s;
+	-moz-animation-name: scroll;
+	-moz-animation-fill-mode:forwards;*/
+		border:1px solid red;
+
+}
+ 
+@-moz-keyframes scroll {
+	0% {left:100%;}
+	100% {left:0%;visibility: hidden;}
+} 
+@-webkit-keyframes scroll {
+	0% {left:100%;}
+	100% {left:0%;visibility: hidden;}
+}*/
+</style>
+</head>
+
+<body>
+<video id="video"></video>
+<div id="messages-container">
+<div id="messages">
+</div>
+</div>
+<script>
+
+	 var onFailSoHard = function(e) {
+	    console.log('Reeeejected!', e);
+	  };
+	 var captureWebCam = function(){
+		window.URL = window.URL || window.webkitURL;
+		navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+		                          navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+		var video = document.getElementById("video");
+		if(navigator.mozGetUserMedia){
+			var video = document.getElementById("video");
+				navigator.mozGetUserMedia(
+		        {video: true},
+		        function(stream) {
+		          video.mozSrcObject = stream;
+		          video.play();
+		          streaming = true;
+		        },
+		        function(err) {
+		          alert("An error occured! " + err);
+		        }
+		      );
+		} else if (navigator.getUserMedia) {
+		  navigator.getUserMedia({audio: false, video: true}, function(stream) {
+		    video.src=window.URL.createObjectURL(stream);
+		     video.play();
+          	streaming = true;
+		  }, onFailSoHard);
+		} 
+	}
+	var windowWidth = $(window).width();
+	var lastLeft  = windowWidth;
+	var addMessage = function(msg){
+		var elem = $('<span class="message">'+msg.userName+':'+msg.message+'</span>');
+		$("#messages").append(elem);
+		lastLeft = lastLeft + elem.width() + 2;
+		if(lastLeft<windowWidth)
+			lastLeft =windowWidth;
+		elem.css('left',lastLeft );
+		elem.css('visibility','visible');
+	}
+	var moveMessages = function(){
+		$(".message").each(function(){
+			$(this).css("left",$(this).css("left")-1 + "px");
+		});
+		lastLeft-1;
+	}
+	//$("#messages").css("top", $("#messages").position().top-$("#messages").height()).css("position","absolute").css("visibility","visible");
+
+	captureWebCam();
+	var lastHndlr;
+	function getNews(){
+		lastHndlr=setTimeout(getNews,1000);
+		$.getJSON("http://10.255.180.102:9000/messages/new", function(resp){
+				clearTimeout(lastHndlr);
+				if(resp && resp.length){
+					console.log(resp);
+					for(var i=0;i<resp.length;i++){
+						addMessage(resp[i]);
+					}
+				}
+			lastHndlr=setTimeout(getNews,200);
+		});
+	}
+	getNews();
+	setInterval(moveMessages,1000);
+</script>
+</body>
+</html>
